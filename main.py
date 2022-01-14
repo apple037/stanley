@@ -32,15 +32,14 @@ async def on_message(message):
             dealOrder(message, tmp[1])
 
 
-def dealOrder(message, order):
-    match order:
-        case "greet":
-            await message.channel.send("Greeting")
-        case "fuck":
-            await message.channel.send("Busy")
-            await client.change_presence(status=discord.Status.idle, activity=order)
-        case _:
-            await message.channel.send("Beep Beep Beep?")
+async def dealOrder(message, order: str):
+    if order == "greet":
+        await message.channel.send("Greeting")
+    elif order == "fuck":
+        await message.channel.send("Busy")
+        await client.change_presence(status=discord.Status.idle, activity=order)
+    else:
+        await message.channel.send("Beep Beep Beep?")
 
 
 client.run('OTMxNDU4MTA5Njk0Njc3MDI0.YeEt9w.Zp6KUJaSJxKzYShVBy8R4-7HM5U')
