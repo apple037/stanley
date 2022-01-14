@@ -29,17 +29,15 @@ async def on_message(message):
         if len(tmp) == 0:
             await message.channel.send("逼逼逼？")
         else:
-            dealOrder(message, tmp[1])
-
-
-async def dealOrder(message, order: str):
-    if order == "greet":
-        await message.channel.send("Greeting")
-    elif order == "fuck":
-        await message.channel.send("Busy")
-        await client.change_presence(status=discord.Status.idle, activity=order)
-    else:
-        await message.channel.send("Beep Beep Beep?")
+            order = tmp[1]
+            if order == "greet":
+                await message.channel.send("Greeting")
+            elif order == "fuck":
+                await message.channel.send("Busy")
+                sta = discord.Game('fuck')
+                await client.change_presence(status=discord.Status.idle, activity=sta)
+            else:
+                await message.channel.send("Beep Beep Beep?")
 
 
 client.run('OTMxNDU4MTA5Njk0Njc3MDI0.YeEt9w.Zp6KUJaSJxKzYShVBy8R4-7HM5U')
