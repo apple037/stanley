@@ -54,4 +54,4 @@ async def on_message(message):
                 await message.channel.send("#help or #Help for usage")
 
 
-client.run('OTMxNDU4MTA5Njk0Njc3MDI0.YeEt9w.Zp6KUJaSJxKzYShVBy8R4-7HM5U')
+client.run('OTMxNDU4MTA5Njk0Njc3MDI0.YeEt9w.C0gJMbWHT_tExqjyEAk8Mky8SKU')
