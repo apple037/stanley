@@ -1,0 +1,36 @@
+{
+	"mapping":[
+		{
+			"name":"Exalted Orb",
+			"alias":[
+				"ex",
+				"EX",
+				"Ex",
+				"崇高石"
+			]
+		},
+		{
+			"name":"Orb of Alchemy",
+			"alias":[
+				"alch",
+				"ALCH",
+				"點金石"
+			]
+		},
+		{
+			"name":"Orb of Scouring",
+			"alias":[
+				"scoure",
+				"scr",
+				"鰱結石"
+			]
+		},
+		{
+			"name":"Awakener's Orb",
+			"alias":[
+				"awk",
+				"喚醒者之玉"
+			]
+		}
+	]
+}

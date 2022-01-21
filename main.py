@@ -2,6 +2,7 @@
 import discord
 import requests
 import json
+import func
 # client是我們與Discord連結的橋樑
 client = discord.Client()
 
@@ -42,36 +43,15 @@ async def on_message(message):
                 await message.channel.send(msg)
                 sta = discord.Game('fuck')
                 await client.change_presence(status=discord.Status.idle, activity=sta)
-            elif order == "find":
-                msg = get_currency_price(arg)
+            elif str(order).upper() == "PRICE" or str(order).upper() == "F":
+                msg = func.get_currency_price(arg)
                 await message.channel.send(msg)
+            elif str(order).upper() == "HELP":
+                await message.channel.send(func.get_help())
+            elif str(order).upper() == "MAP":
+                await message.channel.send(func.getMap())
             else:
-                await message.channel.send("Beep Beep Beep?")
-
-
-def get_currency_price(name):
-    res = ""
-    if name == "ex" or name == "EX" or name == "崇高石":
-        name = "Exalted Orb"
-    elif name == "alch" or name == "ALCH" or name == "點金石":
-        name = "Orb of Alchemy"
-    else:
-        if name != "all":
-            res = "what are you looking for? ouo"
-    r = requests.get('https://poe.ninja/api/data/CurrencyOverview?league=Scourge&type=Currency&language=en')
-    j = r.json()
-    lines = j["lines"]
-    for x in range(0, len(lines)):
-        if name == "all":
-            c = str(lines[x]['currencyTypeName']) + ": " + str(lines[x]['chaosEquivalent'])
-            res = res + "\n" + json.dumps(c)
-        elif name == "Exalted Orb":
-            if lines[x]['currencyTypeName'] == "Exalted Orb":
-                res = lines[x]['chaosEquivalent']
-        elif name == "Orb of Alchemy":
-            if lines[x]['currencyTypeName'] == "Orb of Alchemy":
-                res = lines[x]['chaosEquivalent']
-    return res
+                await message.channel.send("#help or #Help for usage")
 
 
 client.run('OTMxNDU4MTA5Njk0Njc3MDI0.YeEt9w.Zp6KUJaSJxKzYShVBy8R4-7HM5U')
