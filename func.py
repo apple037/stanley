@@ -1,5 +1,7 @@
 import requests
 import json
+import openai
+import random
 
 
 def get_currency_price(name):
@@ -52,3 +54,21 @@ def getMap():
         else:
             res = res + "\n" + str(maps[i]["name"]) + " : " + str(maps[i]["alias"])
     return res
+
+
+def getAnswer(question):
+    openai.api_key = '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'
+    temperature = random.randint(0, 100) / 100
+    completion = openai.Completion.create(
+        engine='text-davinci-003',
+        prompt=question,
+        max_tokens=200,
+        temperature=temperature,
+    )
+    reply_msg = completion["choices"][0]["text"].replace('\n', ' ').strip()
+    if reply_msg.startswith("."):
+        reply_msg = reply_msg[1::]
+    print('Temperature: ' + str(temperature))
+    print('Generated answer: ' + reply_msg)
+    return reply_msg
+

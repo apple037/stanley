@@ -1,10 +1,16 @@
 # 導入Discord.py
+import os
+from dotenv import load_dotenv
 import discord
-import requests
-import json
 import func
-# client是我們與Discord連結的橋樑
-client = discord.Client()
+
+load_dotenv()
+discord_api_key = os.getenv("DISCORD_API_KEY")
+
+# client 是我們與 Discord 連結的橋樑，intents 是我們要求的權限
+intents = discord.Intents.default()
+intents.message_content = True
+client = discord.Client(intents=intents)
 
 
 # 調用event函式庫
@@ -12,7 +18,7 @@ client = discord.Client()
 # 當機器人完成啟動時
 async def on_ready():
     print('目前登入身份：', client.user)
-    game = discord.Game('努力學習py中')
+    game = discord.Game('機油好好喝')
     # discord.Status.<狀態>，可以是online,offline,idle,dnd,invisible
     await client.change_presence(status=discord.Status.idle, activity=game)
 
@@ -36,6 +42,9 @@ async def on_message(message):
                 tmp2 = order.split(" ")
                 order = tmp2[0]
                 arg = tmp2[1]
+                multiArg = ''
+                for i in range(1, len(tmp2)):
+                    multiArg = multiArg + ' ' + tmp2[i]
             if order == "greet":
                 await message.channel.send("Greeting")
             elif order == "fuck":
@@ -50,8 +59,10 @@ async def on_message(message):
                 await message.channel.send(func.get_help())
             elif str(order).upper() == "MAP":
                 await message.channel.send(func.getMap())
+            elif str(order).upper() == "ASK":
+                msg = func.getAnswer(multiArg)
+                await message.channel.send("Hi " + message.author.mention + " Here is my reply: \n" + msg)
             else:
                 await message.channel.send("#help or #Help for usage")
 
-
-client.run('OTMxNDU4MTA5Njk0Njc3MDI0.YeEt9w.C0gJMbWHT_tExqjyEAk8Mky8SKU')
+client.run(discord_api_key)
