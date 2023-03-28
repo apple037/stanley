@@ -1,7 +1,11 @@
 # 導入Discord.py
+import io
 import os
 
 import discord
+import asyncio
+
+from discord.ext import commands
 from dotenv import load_dotenv
 
 import func
@@ -14,7 +18,8 @@ sd_url = os.getenv("STABLE_DIFFUSION_URL")
 # client 是我們與 Discord 連結的橋樑，intents 是我們要求的權限
 intents = discord.Intents.default()
 intents.message_content = True
-client = discord.Client(intents=intents)
+# client = discord.Client(intents=intents)
+client = commands.Bot(command_prefix='!', intents=intents)
 
 
 # 調用event函式庫
@@ -46,9 +51,9 @@ async def on_message(message):
                 tmp2 = order.split(" ")
                 order = tmp2[0]
                 arg = tmp2[1]
-                multiArg = ''
+                multi_arg = ''
                 for i in range(1, len(tmp2)):
-                    multiArg = multiArg + ' ' + tmp2[i]
+                    multi_arg = multi_arg + ' ' + tmp2[i]
             if order == "greet":
                 await message.channel.send("Greeting")
             elif order == "fuck":
@@ -64,14 +69,21 @@ async def on_message(message):
             elif str(order).upper() == "MAP":
                 await message.channel.send(func.get_map())
             elif str(order).upper() == "ASK":
-                msg = func.get_answer(multiArg, open_api_key)
+                msg = func.get_answer(multi_arg, open_api_key)
                 await message.channel.send("Hi " + message.author.mention + " Here is my reply: \n" + msg)
+            elif str(order).upper() == "INFO":
+                info = await func.sd_info(sd_url)
+                await message.channel.send("Hi " + message.author.mention + " " + info)
             elif str(order).upper() == "IMAGE":
                 await message.channel.send("Image generating ..." + message.author.mention + " please wait patiently!")
-                await func.generate_image(multiArg, sd_url)
-                with open('./temp/temp.png', 'rb') as f:
-                    file = discord.File(f)
-                await message.channel.send("Hi " + message.author.mention + " The image generated is below:", file=file)
+                img = await func.generate_image(multi_arg, sd_url)
+                img_buffer = io.BytesIO()
+                img.save(img_buffer, format='PNG')
+                img_buffer.seek(0)
+                await message.channel.send("Hi " + message.author.mention + "The image generated with the "
+                                                                            "corresponding prompts (" +
+                                           multi_arg + ") is below:",
+                                           file=discord.File(fp=img_buffer, filename='image.png'))
             else:
                 await message.channel.send("#help or #Help for usage")
 

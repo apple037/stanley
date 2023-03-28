@@ -5,6 +5,7 @@ import requests
 import json
 import openai
 import random
+import asyncio
 
 from PIL import Image
 
@@ -143,4 +144,19 @@ async def generate_image(prompts, sd_url):
         byte_data = base64.b64decode(images)
         image_data = BytesIO(byte_data)
         img = Image.open(image_data)
-        img.save("./temp/temp.png")
+        return img
+
+
+async def sd_info(sd_url):
+    info_url = sd_url + "/sdapi/v1/progress"
+    response = requests.get(info_url)
+    if response.status_code == 200:
+        progress = response.json()['progress']
+        eta = response.json()['eta_relative']
+        if progress == 0.0 and eta == 0.0:
+            return "Stable diffusion server is free now"
+        message = "Progress " + str(progress) + "% and eta is " + str(eta) + " seconds!"
+        return message
+    else:
+        message = "Error when get progress"
+        return message
