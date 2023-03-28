@@ -1,12 +1,15 @@
 # 導入Discord.py
 import os
-from dotenv import load_dotenv
+
 import discord
+from dotenv import load_dotenv
+
 import func
 
 load_dotenv()
 discord_api_key = os.getenv("DISCORD_API_KEY")
 open_api_key = os.getenv("OPENAI_API_KEY")
+sd_url = os.getenv("STABLE_DIFFUSION_URL")
 
 # client 是我們與 Discord 連結的橋樑，intents 是我們要求的權限
 intents = discord.Intents.default()
@@ -59,11 +62,18 @@ async def on_message(message):
             elif str(order).upper() == "HELP":
                 await message.channel.send(func.get_help())
             elif str(order).upper() == "MAP":
-                await message.channel.send(func.getMap())
+                await message.channel.send(func.get_map())
             elif str(order).upper() == "ASK":
-                msg = func.getAnswer(multiArg, open_api_key)
+                msg = func.get_answer(multiArg, open_api_key)
                 await message.channel.send("Hi " + message.author.mention + " Here is my reply: \n" + msg)
+            elif str(order).upper() == "IMAGE":
+                await message.channel.send("Image generating ..." + message.author.mention + " please wait patiently!")
+                await func.generate_image(multiArg, sd_url)
+                with open('./temp/temp.png', 'rb') as f:
+                    file = discord.File(f)
+                await message.channel.send("Hi " + message.author.mention + " The image generated is below:", file=file)
             else:
                 await message.channel.send("#help or #Help for usage")
+
 
 client.run(discord_api_key)

@@ -1,13 +1,18 @@
-import os
-from dotenv import load_dotenv
-import unittest
-import requests
-import re
 import json
+import os
+import unittest
+
+import aiohttp
 import openai
+import base64
+from PIL import Image
+from io import BytesIO
+import requests
+from dotenv import load_dotenv
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
+sd_url = os.getenv("STABLE_DIFFUSION_URL")
 
 
 def inObject(name, maps):
@@ -25,7 +30,7 @@ class MyTestCase(unittest.TestCase):
 
     def testTime(self):
         r = requests.get("https://showcase.api.linx.twenty57.net/UnixTime/tounix?date=now")
-        x = re.sub(r"\D", " ", str(r.content))
+        x = r.sub(r"\D", " ", str(r.content))
         self.assertTrue(int(x) > 1642672605)
         # print(x)
 
@@ -80,6 +85,64 @@ class MyTestCase(unittest.TestCase):
             multiArg = ''
             for i in range(1, len(tmp2)):
                 multiArg = multiArg + ' ' + tmp2[i]
+
+
+    def testImgGeneration(self):
+        headers = {"Content-Type": "application/json; charset=utf-8"}
+        false = False
+        true = True
+        request_body ={
+            "enable_hr": false,
+            "denoising_strength": 0,
+            "firstphase_width": 0,
+            "firstphase_height": 0,
+            "hr_scale": 2,
+            "hr_upscaler": "",
+            "hr_second_pass_steps": 0,
+            "hr_resize_x": 0,
+            "hr_resize_y": 0,
+            "styles": [],
+            "seed": -1,
+            "subseed": -1,
+            "subseed_strength": 0,
+            "seed_resize_from_h": -1,
+            "seed_resize_from_w": -1,
+            "sampler_name": "",
+            "batch_size": 1,
+            "n_iter": 1,
+            "steps": 50,
+            "cfg_scale": 7,
+            "width": 512,
+            "height": 512,
+            "restore_faces": false,
+            "tiling": false,
+            "do_not_save_samples": false,
+            "do_not_save_grid": false,
+            "negative_prompt": "",
+            "eta": 0,
+            "s_churn": 0,
+            "s_tmax": 0,
+            "s_tmin": 0,
+            "s_noise": 1,
+            "override_settings": {},
+            "override_settings_restore_afterwards": true,
+            "script_args": [],
+            "sampler_index": "Euler",
+            "script_name": "",
+            "send_images": true,
+            "save_images": false,
+            "alwayson_scripts": {},
+            "prompt": "a dog walking at street"
+        }
+        txt2img_url = sd_url + "/sdapi/v1/txt2img"
+        print(txt2img_url)
+        response = requests.post(txt2img_url, headers=headers, data=json.dumps(request_body))
+        if response.status_code == 200:
+            images = response.json()['images'][0]
+            byte_data = base64.b64decode(images)
+            image_data = BytesIO(byte_data)
+            img = Image.open(image_data)
+            img.show("030")
 
 
 if __name__ == '__main__':
