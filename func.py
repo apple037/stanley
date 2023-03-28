@@ -56,19 +56,29 @@ def getMap():
     return res
 
 
-def getAnswer(question):
-    openai.api_key = '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'
+def getAnswer(question, api_key):
+    openai.api_key = api_key
     temperature = random.randint(0, 100) / 100
-    completion = openai.Completion.create(
-        engine='text-davinci-003',
-        prompt=question,
-        max_tokens=200,
+    response = openai.ChatCompletion.create(
+        model='gpt-3.5-turbo',
         temperature=temperature,
+        messages=[
+            {'role': 'user', 'content': question}
+        ],
+        stream=True
     )
-    reply_msg = completion["choices"][0]["text"].replace('\n', ' ').strip()
-    if reply_msg.startswith("."):
-        reply_msg = reply_msg[1::]
+    # create variables to collect the stream of chunks
+    collected_chunks = []
+    collected_messages = []
+
+    for chunk in response:
+        collected_chunks.append(chunk)  # save the event response
+        chunk_message = chunk['choices'][0]['delta']  # extract the message
+        collected_messages.append(chunk_message)  # save the message
+
+    full_reply_content = ''.join([m.get('content', '') for m in collected_messages])
+    print(f"Full conversation received: {full_reply_content}")
     print('Temperature: ' + str(temperature))
-    print('Generated answer: ' + reply_msg)
-    return reply_msg
+    # print('Generated answer: ' + full_reply_content)
+    return full_reply_content
 

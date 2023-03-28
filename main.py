@@ -6,6 +6,7 @@ import func
 
 load_dotenv()
 discord_api_key = os.getenv("DISCORD_API_KEY")
+open_api_key = os.getenv("OPENAI_API_KEY")
 
 # client 是我們與 Discord 連結的橋樑，intents 是我們要求的權限
 intents = discord.Intents.default()
@@ -60,7 +61,7 @@ async def on_message(message):
             elif str(order).upper() == "MAP":
                 await message.channel.send(func.getMap())
             elif str(order).upper() == "ASK":
-                msg = func.getAnswer(multiArg)
+                msg = func.getAnswer(multiArg, open_api_key)
                 await message.channel.send("Hi " + message.author.mention + " Here is my reply: \n" + msg)
             else:
                 await message.channel.send("#help or #Help for usage")
