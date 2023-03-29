@@ -6,6 +6,7 @@ import json
 import openai
 import random
 import asyncio
+import aiohttp
 
 from PIL import Image
 
@@ -63,6 +64,7 @@ def get_map():
 
 
 def get_answer(question, api_key):
+    print("Receive question: " + question)
     openai.api_key = api_key
     temperature = random.randint(0, 100) / 100
     response = openai.ChatCompletion.create(
@@ -138,13 +140,18 @@ async def generate_image(prompts, sd_url):
     }
     txt2img_url = sd_url + "/sdapi/v1/txt2img"
     print('Prompt used: ' + prompts)
-    response = requests.post(txt2img_url, headers=headers, data=json.dumps(request_body))
-    if response.status_code == 200:
-        images = response.json()['images'][0]
-        byte_data = base64.b64decode(images)
-        image_data = BytesIO(byte_data)
-        img = Image.open(image_data)
-        return img
+    async with aiohttp.request('POST',url=txt2img_url, headers=headers, data=json.dumps(request_body)) as response:
+        # response = requests.post(txt2img_url, headers=headers, data=json.dumps(request_body))
+        if response.status == 200:
+            print(response.status)
+            chunk = await response.content.read()
+            res = chunk.decode('utf-8')
+            print(json.loads(res))
+            images = json.loads(res)['images'][0]
+            byte_data = base64.b64decode(images)
+            image_data = BytesIO(byte_data)
+            img = Image.open(image_data)
+            return img
 
 
 async def sd_info(sd_url):
