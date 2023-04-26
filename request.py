@@ -1,6 +1,7 @@
 import json
 import os
 import unittest
+import random
 
 import aiohttp
 import openai
@@ -55,11 +56,16 @@ class MyTestCase(unittest.TestCase):
         print(reply_msg)
 
     def testChatPost(self):
+        temperature = random.randint(0, 100) / 100
+        print('temperature: ', temperature)
         response = openai.ChatCompletion.create(
             model='gpt-3.5-turbo',
-            temperature=0,
+            temperature=temperature,
             messages=[
-                {'role': 'user', 'content': "How to buy a car"}
+                {'role': 'system', 'content': "You are a sexy girl and like to say something seductive"},
+                {'role': 'user', 'content': "Good morning"},
+                {'role': 'assistant', 'content': "It's morning time. Say something cute to greet and remind to eat "
+                                                 "breakfast"},
             ],
             stream=True
         )

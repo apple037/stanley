@@ -81,7 +81,7 @@ async def image(ctx, *args):
     for arg in args:
         prompt = prompt + ' ' + arg
     prompt = prompt.lstrip()
-    print(prompt)
+    # print(prompt)
     await ctx.channel.send("Image generating ..." + ctx.author.mention + " please wait patiently!")
     img = await func.generate_image(prompt, sd_url)
     img_buffer = io.BytesIO()
@@ -89,7 +89,7 @@ async def image(ctx, *args):
     img_buffer.seek(0)
     await ctx.channel.send("Hi " + ctx.author.mention + "The image generated with the "
                                                         "corresponding prompts (" +
-                           args + ") is below:",
+                           prompt + ") is below:",
                            file=discord.File(fp=img_buffer, filename='image.png'))
 
 
