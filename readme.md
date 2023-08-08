@@ -17,9 +17,14 @@ requests==2.28.1
 openai==0.26.0
 python-dotenv==0.21.0
 ```
+## Preliminary
+1. If you want to use image generation function, you need to run a [Stable Diffusion](https://github.com/AUTOMATIC1111/stable-diffusion-webui) or other image generation server
+2. Update the .env file to your own token
 ## Function
 1. Request and parse the response from poeNinja to get poe currency price
 2. Add a chatGpt textCompletion to achieve simulate chatting
 3. Add a Stable Diffusion image generation function
 4. Add a Blip image to text function
 5. Add a random cat function 🐱
+## Future work
+1. 🤔
