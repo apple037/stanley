@@ -1,6 +1,6 @@
 # Python chatbot
 ## runtime environment
-- Windows 10
+- Windows 10, Macos
 - Python 3.9.7
 ## requirement
 ```
@@ -20,3 +20,6 @@ python-dotenv==0.21.0
 ## Function
 1. Request and parse the response from poeNinja to get poe currency price
 2. Add a chatGpt textCompletion to achieve simulate chatting
+3. Add a Stable Diffusion image generation function
+4. Add a Blip image to text function
+5. Add a random cat function 🐱

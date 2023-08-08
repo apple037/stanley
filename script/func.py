@@ -1,18 +1,17 @@
 import base64
+import json
+import random
 from io import BytesIO
 
-import requests
-import json
-import openai
-import random
-import asyncio
 import aiohttp
-
+import openai
+import replicate
+import requests
 from PIL import Image
 
 
 def get_currency_price(name):
-    f = open('mapping.json', encoding='utf-8')
+    f = open('../resource/mapping.json', encoding='utf-8')
     data = json.load(f)
     res = ""
     maps = data["mapping"]
@@ -51,7 +50,7 @@ def in_object(name, maps):
 
 
 def get_map():
-    f = open('mapping.json', encoding='utf-8')
+    f = open('../resource/mapping.json', encoding='utf-8')
     data = json.load(f)
     res = ""
     maps = data["mapping"]
@@ -71,6 +70,7 @@ def get_answer(question, api_key):
         model='gpt-3.5-turbo',
         temperature=temperature,
         messages=[
+            {'role': 'system', 'content': '接收任何語言的問題並使用繁體中文回答'},
             {'role': 'user', 'content': question}
         ],
         stream=True
@@ -139,15 +139,15 @@ async def generate_image(prompts, sd_url):
         "sampler_name": "",
         "batch_size": 1,
         "n_iter": 1,
-        "steps": 50,
+        "steps": 30,
         "cfg_scale": 7,
         "width": 512,
         "height": 512,
-        "restore_faces": false,
+        "restore_faces": true,
         "tiling": false,
         "do_not_save_samples": false,
         "do_not_save_grid": false,
-        "negative_prompt": "",
+        "negative_prompt": "bad-hands-5, EasyNegative, ng_deepnegative_v1_75t",
         "eta": 0,
         "s_churn": 0,
         "s_tmax": 0,
@@ -165,7 +165,7 @@ async def generate_image(prompts, sd_url):
     }
     txt2img_url = sd_url + "/sdapi/v1/txt2img"
     print('Prompt used: ' + prompts)
-    async with aiohttp.request('POST',url=txt2img_url, headers=headers, data=json.dumps(request_body)) as response:
+    async with aiohttp.request('POST', url=txt2img_url, headers=headers, data=json.dumps(request_body)) as response:
         # response = requests.post(txt2img_url, headers=headers, data=json.dumps(request_body))
         if response.status == 200:
             # print(response.status)
@@ -192,3 +192,22 @@ async def sd_info(sd_url):
     else:
         message = "Error when get progress"
         return message
+
+
+async def img2txt(image_url, api_key):
+    # 使用 Replicate 套件呼叫模型
+    client = replicate.Client(api_token=api_key)
+    result = client.run(
+        "andreasjansson/blip-2:4b32258c42e9efd4288bb9910bc532a69727f9acd26aa08e175713a0a857a608",
+        input={"image": image_url}
+    )
+
+    return result
+
+
+async def random_cat():
+    response = requests.get('https://cataas.com/cat')
+    if response.status_code == 200:
+        return Image.open(BytesIO(response.content))
+    else:
+        return None

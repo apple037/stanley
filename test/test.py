@@ -1,14 +1,13 @@
+import base64
 import json
 import os
-import unittest
 import random
-
-import aiohttp
-import openai
-import base64
-from PIL import Image
+import unittest
 from io import BytesIO
+
+import openai
 import requests
+from PIL import Image
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -40,7 +39,7 @@ class MyTestCase(unittest.TestCase):
 
     def testGet(self):
         name = "ex"
-        f = open('mapping.json', encoding='utf-8')
+        f = open('../resource/mapping.json', encoding='utf-8')
         data = json.load(f)
         maps = data["mapping"]
         print(inObject(name, maps[0]["alias"]))
@@ -81,7 +80,6 @@ class MyTestCase(unittest.TestCase):
         full_reply_content = ''.join([m.get('content', '') for m in collected_messages])
         print(f"Full conversation received: {full_reply_content}")
 
-
     def testParse(self):
         order = '#ASK Describe Elon Musk in Three words'
         if " " in order:
@@ -92,12 +90,11 @@ class MyTestCase(unittest.TestCase):
             for i in range(1, len(tmp2)):
                 multiArg = multiArg + ' ' + tmp2[i]
 
-
     def testImgGeneration(self):
         headers = {"Content-Type": "application/json; charset=utf-8"}
         false = False
         true = True
-        request_body ={
+        request_body = {
             "enable_hr": false,
             "denoising_strength": 0,
             "firstphase_width": 0,
@@ -149,6 +146,14 @@ class MyTestCase(unittest.TestCase):
             image_data = BytesIO(byte_data)
             img = Image.open(image_data)
             img.show("030")
+
+    def test_random_cat(self):
+        response = requests.get('https://cataas.com/cat')
+        if response.status_code == 200:
+            img = Image.open(BytesIO(response.content))
+            img.show("cat")
+        else:
+            return None
 
 
 if __name__ == '__main__':

@@ -3,12 +3,11 @@ import io
 import os
 
 import discord
-import asyncio
 
 from discord.ext import commands
 from dotenv import load_dotenv
 
-import func
+from script import func, common
 
 load_dotenv()
 discord_api_key = os.getenv("DISCORD_API_KEY")
@@ -91,6 +90,30 @@ async def image(ctx, *args):
                                                         "corresponding prompts (" +
                            prompt + ") is below:",
                            file=discord.File(fp=img_buffer, filename='image.png'))
+
+
+@client.command(help="Use BLIP2 to perform image to text conversion")
+async def img2txt(ctx, arg):
+    # 檢查是否為有效的url
+    if not common.is_valid_url(arg):
+        await ctx.channel.send(ctx.author.mention + " the input: " + arg + " is not a valid url")
+    await ctx.channel.send("Image to text converting ..." + ctx.author.mention + " please wait patiently!")
+    parsed_text = await func.img2txt(arg)
+    await ctx.channel.send("Hi " + ctx.author.mention + "The text generated with the "
+                                                        "corresponding image (" +
+                           arg + ") is below: " + "\n" + parsed_text)
+
+
+# Get a random cat image
+@client.command(help="Get a random cat image")
+async def cat(ctx):
+    await ctx.channel.send("Cat image generating ..." + ctx.author.mention + " please wait patiently!")
+    img = await func.get_cat_image()
+    img_buffer = io.BytesIO()
+    img.save(img_buffer, format='PNG')
+    img_buffer.seek(0)
+    await ctx.channel.send("Hi " + ctx.author.mention + "The cat image generated is below:",
+                           file=discord.File(fp=img_buffer, filename='cat.png'))
 
 
 @client.event
