@@ -20,6 +20,9 @@ bot = commands.Bot(command_prefix='#', intents=intents)
 @bot.event
 # 當機器人完成啟動時
 async def on_ready():
+    # 載入斜線指令
+    slash = await bot.tree.sync()
+    print(f"載入 {len(slash)} 個斜線指令")
     print('目前登入身份：', bot.user)
     game = discord.Game('機油好好喝')
     # discord.Status.<狀態>，可以是online,offline,idle,dnd,invisible

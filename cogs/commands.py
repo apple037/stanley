@@ -1,3 +1,4 @@
+import datetime
 import os
 
 import discord
@@ -33,8 +34,10 @@ class Main(Cog_Extension):
     # github link
     @commands.command(help="Get the github link")
     async def github(self, ctx):
-        link = discord.Embed()
-        link.description = "Link: [here](https://github.com/apple037/stanley)"
+        link = discord.Embed(timestamp=datetime.datetime.now())
+        link.set_author(name="Jasper the Fan")
+        link.set_thumbnail(url="https://memeprod.ap-south-1.linodeobjects.com/user-template/5aa6a83bcdf67346bab4b0fcd672b13a.png")
+        link.description = "Github link: [here](https://github.com/apple037/stanley)"
         await ctx.channel.send(embed=link)
 
 
