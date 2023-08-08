@@ -10,9 +10,9 @@ class Cog_Extension(commands.Cog):
 
 
 class Dance(enum.Enum):
-    quick_sort = "Big O(nlogn)"
-    bubble_sort = "Big O(N^2)"
-    merge_sort = "Big O(nlogn)"
-    insertion_sort = "Big O(N^2)"
-    selection_sort = "Big O(N^2)"
-    heap_sort = "Big O(nlogn)"
+    quick_sort = 'quick_sort'
+    merge_sort = 'merge_sort'
+    bubble_sort = 'bubble_sort'
+    insertion_sort = 'insertion_sort'
+    selection_sort = 'selection_sort'
+    heap_sort = 'heap_sort'
