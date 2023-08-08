@@ -5,9 +5,9 @@ from core.classes import Cog_Extension, Dance
 
 
 def get_step(dance):
-    if dance in ("quick_sort", "merge_sort", "selection_sort", "heap_sort", "insertion_sort"):
+    if dance in ("quick_sort", "merge_sort", "selection_sort", "heap_sort"):
         return "BigO(nlogn)"
-    elif dance in "bubble_sort":
+    elif dance in ("bubble_sort", "insertion_sort"):
         return "BigO(n^2)"
 
 
