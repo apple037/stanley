@@ -20,6 +20,13 @@ pytest==7.4.0
 Pillow==10.0.0
 replicate==0.11.0
 ```
+## Usage
+1. Run on local
+   1. run `pip install -r requirements.txt`
+   2. run `python main.py`
+2. Run on docker
+   1. run `docker build -t python-chatbot .`
+   2. run `docker run -d --name python-chatbot python-chatbot`
 ## Preliminary
 1. If you want to use image generation function, you need to run a [Stable Diffusion](https://github.com/AUTOMATIC1111/stable-diffusion-webui) or other image generation server
 2. Update the .env file to your own token
