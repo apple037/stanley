@@ -4,18 +4,21 @@
 - Python 3.9.7
 ## requirement
 ```
-aiohttp==3.8.3
+aiohttp==3.8.5
 async-timeout==4.0.2
-attrs==22.2.0
-chardet==5.1.0
-discord.py==2.1.0
+attrs==23.1.0
+chardet==5.2.0
+discord.py==2.3.1
 idna==3.4
 multidict==6.0.4
-typing-extensions==4.4.0
-yarl==1.8.2
-requests==2.28.1
-openai==0.26.0
-python-dotenv==0.21.0
+typing-extensions==4.7.1
+yarl==1.9.2
+requests==2.31.0
+openai==0.27.8
+python-dotenv==1.0.0
+pytest==7.4.0
+Pillow==10.0.0
+replicate==0.11.0
 ```
 ## Preliminary
 1. If you want to use image generation function, you need to run a [Stable Diffusion](https://github.com/AUTOMATIC1111/stable-diffusion-webui) or other image generation server
