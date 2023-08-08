@@ -5,6 +5,7 @@
 ## requirement
 ```
 aiohttp==3.8.5
+asyncio==3.4.3
 async-timeout==4.0.2
 attrs==23.1.0
 chardet==5.2.0

@@ -201,7 +201,7 @@ async def img2txt(image_url, api_key):
         "andreasjansson/blip-2:4b32258c42e9efd4288bb9910bc532a69727f9acd26aa08e175713a0a857a608",
         input={"image": image_url}
     )
-
+    print("Result: " + result)
     return result
 
 
