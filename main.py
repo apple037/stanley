@@ -108,7 +108,7 @@ async def img2txt(ctx, arg):
 @client.command(help="Get a random cat image")
 async def cat(ctx):
     await ctx.channel.send("Cat image generating ..." + ctx.author.mention + " please wait patiently!")
-    img = await func.get_cat_image()
+    img = await func.random_cat()
     img_buffer = io.BytesIO()
     img.save(img_buffer, format='PNG')
     img_buffer.seek(0)
